@@ -8,10 +8,11 @@ import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.text.selection.DisableSelection
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.*
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -19,6 +20,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
@@ -94,6 +97,77 @@ class MainActivity : ComponentActivity() {
             CreateConstraint()
 
             SelectableText()
+
+            TextFields()
+        }
+    }
+
+    @Composable
+    private fun TextFields() {
+        Card(elevation = 4.dp, modifier = Modifier.padding(15.dp)) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(15.dp)
+            ) {
+
+                /**
+                 * by remember 报错：
+                 * Type 'Type Variable(T)' has no method 'getValue(Nothing?, KProperty<*>)' and thus it cannot serve as a delegate
+                 * 解决方法：import androidx.compose.runtime.getValue
+                 */
+                var text by remember { mutableStateOf("") }
+
+                TextField(
+                    value = text,
+                    onValueChange = {
+                        text = it
+                    },
+                    label = {
+                        Text("Label")
+                    },
+                    placeholder = {
+                        Text("TextField")
+                    },
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                var textOutLined by remember { mutableStateOf("") }
+                OutlinedTextField(
+                    value = textOutLined,
+                    onValueChange = {
+                        textOutLined = it
+                    },
+                    label = {
+                        Text("Label")
+                    },
+                    placeholder = {
+                        Text("OutlinedTextField")
+                    },
+                    maxLines = 3,
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                var password by remember { mutableStateOf("") }
+
+                OutlinedTextField(
+                    value = password,
+                    onValueChange = {
+                        password = it
+                    },
+                    label = {
+                        Text("Enter Password")
+                    },
+                    placeholder = {
+                        Text("Enter Password")
+                    },
+                    singleLine = true,
+                    modifier = Modifier.fillMaxWidth(),
+                    visualTransformation = PasswordVisualTransformation(),
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password)
+                )
+            }
         }
     }
 
