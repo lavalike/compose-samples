@@ -1,5 +1,6 @@
 package com.compose.samples
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -206,21 +207,18 @@ class MainActivity : ComponentActivity() {
                     .height(150.dp)
                     .padding(15.dp)
             ) {
-                val (btn_top_start, text_1, btn_bottom_end, text_2, text_center) = createRefs()
+                val (btn_canvas, btn_bottom_end, text_center) = createRefs()
                 Button(
-                    onClick = {},
-                    modifier = Modifier.constrainAs(btn_top_start) {
+                    onClick = {
+                        startActivity(Intent(this@MainActivity, CanvasActivity::class.java))
+                    },
+                    modifier = Modifier.constrainAs(btn_canvas) {
                         top.linkTo(parent.top)
                         start.linkTo(parent.start)
                     }
                 ) {
-                    Text("top start")
+                    Text("canvas")
                 }
-
-                Text("text 1", Modifier.constrainAs(text_1) {
-                    top.linkTo(btn_top_start.bottom)
-                    start.linkTo(btn_top_start.start)
-                })
 
                 Button(
                     onClick = { },
@@ -230,12 +228,6 @@ class MainActivity : ComponentActivity() {
                     }) {
                     Text("bottom end")
                 }
-
-                Text("text 2",
-                    modifier = Modifier.constrainAs(text_2) {
-                        bottom.linkTo(btn_bottom_end.top)
-                        end.linkTo(btn_bottom_end.end)
-                    })
 
                 Text(text = "center", modifier = Modifier.constrainAs(text_center) {
                     centerTo(parent)
