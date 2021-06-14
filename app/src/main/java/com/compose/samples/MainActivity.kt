@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.*
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
@@ -95,11 +96,64 @@ class MainActivity : ComponentActivity() {
 
             Spacer(modifier = Modifier.size(15.dp))
 
+            CreateAnimation()
+
             CreateConstraint()
 
             SelectableText()
 
             TextFields()
+        }
+    }
+
+    @OptIn(ExperimentalAnimationApi::class)
+    @Composable
+    private fun CreateAnimation() {
+        Card(elevation = 4.dp, modifier = Modifier.padding(15.dp)) {
+            Column(
+                modifier = Modifier
+                    .padding(10.dp)
+                    .fillMaxWidth()
+            ) {
+                Text(text = "AnimatedVisibility")
+                Row {
+                    var editable by remember { mutableStateOf(true) }
+                    Button(onClick = {
+                        editable = !editable
+                    }) {
+                        Text(text = "open/close")
+                    }
+                    AnimatedVisibility(
+                        visible = editable,
+                        enter = fadeIn() + expandHorizontally(),
+                        exit = fadeOut() + shrinkHorizontally()
+                    ) {
+                        Button(
+                            onClick = {
+                                Toast.makeText(this@MainActivity, "Edit", Toast.LENGTH_SHORT).show()
+                            }, modifier = Modifier.padding(start = 10.dp)
+                        ) {
+                            Text(text = "Edit")
+                        }
+                    }
+                }
+
+                Text(text = "animateContentSize")
+                var message by remember { mutableStateOf("Hello") }
+                Button(onClick = {
+                    message += "\n${System.currentTimeMillis()}"
+                }) {
+                    Text(text = "add text")
+                }
+                Box(
+                    modifier = Modifier
+                        .padding(top = 10.dp)
+                        .background(Color(0xFF007C7C))
+                        .animateContentSize()
+                ) {
+                    Text(text = message, color = Color.White)
+                }
+            }
         }
     }
 
